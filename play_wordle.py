@@ -11,7 +11,7 @@ def main():
     word_set = load_word_set("wordle_words.txt")
     secret = random.choice(list(word_set))
 
-    print('\nWELCOME TO WORDLE')
+    print('\n!WELCOME TO WORDLE!')
     print("┌"  + "─" * 11 + "┐")
     print("│" + " _" + " _ " + "_" + " _ " + "_ " + "│")
     print("│" + " _" + " _ " + "_" + " _ " + "_ " + "│")
@@ -39,9 +39,14 @@ def main():
        
     if wordle.is_solved:
         print(Fore.GREEN + "SOLVED" + Fore.RESET)
+        response = input("\nPLAY AGAIN(YES/NO):").strip().upper()
+        play_again(response)
+
     else:
         print(Fore.RED + "FAILED" + Fore.RESET)
         print(f"WORD WAS:{wordle.secret}")
+        response = input("\nPLAY AGAIN(YES/NO):").strip().upper()
+        play_again(response)
 
 def display_results(wordle: Wordle):
     print(f"\nRemaing Attempts:{wordle.remainning_attempt}")
@@ -92,6 +97,15 @@ def draw_border_araound(lines: list[str], size: int=9, pad: int=1):
         print("│" + space + line + space + "│")
 
     print(bottom_border)
+
+def play_again(response):
+    if response == "YES":
+        main()
+    elif response == "NO":
+        print("\nTHANK YOU FOR PLAYING")
+    else:
+        print("not valid response")
+
 
 if __name__ == "__main__":
     main()
