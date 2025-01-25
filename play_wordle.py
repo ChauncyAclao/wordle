@@ -23,11 +23,12 @@ def main():
     print("└"  + "─" * 11 + "┘")
 
     wordle = Wordle(secret)
+
+    start_time = 0
     
     while wordle.can_attempt:
         answer = input("\nType out your guess:").strip().upper()
-        start_time = time.time()
-
+        
         if len(answer) != wordle.word_lenght:
             print(Fore.RED + f"\nWORD MUST BE {wordle.word_lenght} CHARACTERS LONG" + Fore.RESET)
             continue
@@ -35,30 +36,34 @@ def main():
         if not answer in word_set:
             print(Fore.RED + f"{answer} NOT A VALID WORD" + Fore.RESET)
             continue
+
+        if start_time is 0:
+            start_time = time.time()
             
         wordle.attempt(answer)
         display_results(wordle)
+
+    end_time = time.time()
+    timer = end_time - start_time
+    timer_in_minutes = timer / 60
        
     if wordle.is_solved:
         print(Fore.GREEN + "SOLVED" + Fore.RESET)
 
-        end_time = time.time()
-        timer = end_time - start_time
-        print(f"\n It took you {timer:.2f}")
-
+        print(f"\n It took you {timer_in_minutes:.2f}")
+        
         response = input("\nPLAY AGAIN(YES/NO):").strip().upper()
         play_again(response)
 
     else:
-        print(Fore.RED + "FAILED" + Fore.RESET)
+        print(Fore.RED + "YOU LOSE" + Fore.RESET)
         print(f"WORD WAS:{wordle.secret}")
 
-        end_time = time.time()
-        timer = end_time - start_time
-        print(f"\n It took you {timer:.2f}")
+        print(f"\n It took you {timer_in_minutes:.2f}")
 
         response = input("\nPLAY AGAIN(YES/NO):").strip().upper()
         play_again(response)
+
 
 def display_results(wordle: Wordle):
     print(f"\nRemaing Attempts:{wordle.remainning_attempt}")
