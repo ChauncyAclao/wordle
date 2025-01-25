@@ -5,6 +5,7 @@ from wordle import Wordle
 from letter_state import LetterSate
 from colorama import Fore
 import random
+import time
 
 def main():
 
@@ -25,6 +26,7 @@ def main():
     
     while wordle.can_attempt:
         answer = input("\nType out your guess:").strip().upper()
+        start_time = time.time()
 
         if len(answer) != wordle.word_lenght:
             print(Fore.RED + f"\nWORD MUST BE {wordle.word_lenght} CHARACTERS LONG" + Fore.RESET)
@@ -39,12 +41,22 @@ def main():
        
     if wordle.is_solved:
         print(Fore.GREEN + "SOLVED" + Fore.RESET)
+
+        end_time = time.time()
+        timer = end_time - start_time
+        print(f"\n It took you {timer:.2f}")
+
         response = input("\nPLAY AGAIN(YES/NO):").strip().upper()
         play_again(response)
 
     else:
         print(Fore.RED + "FAILED" + Fore.RESET)
         print(f"WORD WAS:{wordle.secret}")
+
+        end_time = time.time()
+        timer = end_time - start_time
+        print(f"\n It took you {timer:.2f}")
+
         response = input("\nPLAY AGAIN(YES/NO):").strip().upper()
         play_again(response)
 
