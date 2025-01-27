@@ -11,6 +11,7 @@ def main():
 
     word_set = load_word_set("wordle_words.txt")
     secret = random.choice(list(word_set))
+    best_time = load_save_best_time()
 
     print('\n!WELCOME TO WORDLE!')
     print("┌"  + "─" * 11 + "┐")
@@ -22,12 +23,12 @@ def main():
     print("│" + " _" + " _ " + "_" + " _ " + "_ " + "│")
     print("└"  + "─" * 11 + "┘")
 
-    wordle = Wordle(secret)
+    wordle = Wordle("APPLE")
 
     start_time = 0
     
     while wordle.can_attempt:
-        answer = input("\nType out your guess:").strip().upper()
+        answer = input("\nType your guess:").strip().upper()
         
         if len(answer) != wordle.word_lenght:
             print(Fore.RED + f"\nWORD MUST BE {wordle.word_lenght} CHARACTERS LONG" + Fore.RESET)
@@ -46,11 +47,18 @@ def main():
     end_time = time.time()
     timer = end_time - start_time
     timer_in_minutes = timer / 60
-       
+
     if wordle.is_solved:
         print(Fore.GREEN + "SOLVED" + Fore.RESET)
 
-        print(f"\n It took you {timer_in_minutes:.2f}")
+        print(f"\nIt took you {timer_in_minutes:.2f} minutes")
+
+        if best_time is None or timer_in_minutes < best_time:
+            best_time = timer_in_minutes
+            save_best_time(best_time)
+            print(f"{best_time:.2f}")
+        elif timer_in_minutes > best_time:
+            print(f"BESt TIME:{best_time:.2f}")
         
         response = input("\nPLAY AGAIN(YES/NO):").strip().upper()
         play_again(response)
@@ -58,8 +66,6 @@ def main():
     else:
         print(Fore.RED + "YOU LOSE" + Fore.RESET)
         print(f"WORD WAS:{wordle.secret}")
-
-        print(f"\n It took you {timer_in_minutes:.2f}")
 
         response = input("\nPLAY AGAIN(YES/NO):").strip().upper()
         play_again(response)
@@ -123,6 +129,16 @@ def play_again(response):
     else:
         print("not valid response")
 
+def save_best_time(best_time):
+    with open("best_time_file.txt", "w") as file:
+        file.write(str(best_time))
 
+def load_save_best_time():
+    try:
+        with open("best_time_file.txt", "r") as file:
+            return float(file.read().strip())
+    except FileNotFoundError:
+        return None
+        
 if __name__ == "__main__":
     main()
