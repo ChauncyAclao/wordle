@@ -23,7 +23,7 @@ def main():
     print("│" + " _" + " _ " + "_" + " _ " + "_ " + "│")
     print("└"  + "─" * 11 + "┘")
 
-    wordle = Wordle("APPLE")
+    wordle = Wordle(secret)
 
     start_time = 0
     
@@ -56,9 +56,9 @@ def main():
         if best_time is None or timer_in_minutes < best_time:
             best_time = timer_in_minutes
             save_best_time(best_time)
-            print(f"{best_time:.2f}")
+            print(Fore.CYAN + f"BEST TIME{best_time:.2f}" + Fore.RESET)
         elif timer_in_minutes > best_time:
-            print(f"BESt TIME:{best_time:.2f}")
+            print(Fore.CYAN + f"BEST TIME{best_time:.2f}" + Fore.RESET)
         
         response = input("\nPLAY AGAIN(YES/NO):").strip().upper()
         play_again(response)
